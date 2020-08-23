@@ -6,10 +6,10 @@ The goal with that project is refactory a C# version created on college.
   ## Refactory Phases
   
   The refactory will have five phases:
+
+  1) ~~Translate from C# to Java~~ Create from Scratch **(I'm currently here)**
   
-  1) Translate from C# to Java **(I'm currently here)**
-  
-      The first step is just translate the code for Java 8 with Spring Boot.
+      The C # Code was coupling the visual behavior with the game rules. So start over, just using the C# code as a guide, was a better decision.
       
   2) Unit Tests
   
