@@ -10,7 +10,7 @@ class MapBusinessGenerateObstaclesTest extends Specification {
             MapBusiness mapBusiness = new MapBusiness(5)
 
         when:
-            mapBusiness.GenerateObstacles(5)
+            mapBusiness.generateObstacles(5)
 
         then: " to get a random locations of obstacles on the map"
             mapBusiness.obstacles.size() == 5
