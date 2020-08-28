@@ -1,15 +1,15 @@
 # BomberArena
-A version of the Bomber Man game.
+An alternative version of the classic Bomber Man game.
 
-The goal with that project is refactory a C# version created on college.
+The goal of this project is to refactor a C# version created while I was in college.
 
   ## Refactory Phases
   
-  The refactory will have five phases:
+  The refactory will be divided in five phases:
 
   1) ~~Translate from C# to Java~~ Create from Scratch **(I'm currently here, ...)**
   
-      The C # Code was coupling the visual behavior with the game rules. So start over, just using the C# code as a guide, was a better decision.
+      The C# Code was coupling the visual behavior with the game rules. To make the development easier, start over just using the C# code as a guide, become a better decision.
       
   2) Unit Tests **(...here, ...)**
   
