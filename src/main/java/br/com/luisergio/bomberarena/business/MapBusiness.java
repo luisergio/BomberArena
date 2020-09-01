@@ -5,6 +5,7 @@ import java.util.List;
 
 import br.com.luisergio.bomberarena.basics.Position;
 import br.com.luisergio.bomberarena.exception.InvalidMapSizeException;
+import br.com.luisergio.bomberarena.util.NumberUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +28,8 @@ public class MapBusiness {
 
     private List<Position> playerStartPositions;
 
+    private List<Position> blockablePositions;
+
     public MapBusiness(Integer mapSize){
 
         //The size of the map must be even and bigger or equal then five.
@@ -38,55 +41,30 @@ public class MapBusiness {
 
         this.playerStartPositions = this.getPlayerStartPositions();
 
+        this.blockablePositions = this.getBlockablePositions();
+
     }
 
     /**
      * Generate randomicaly obstacles on the map
-     * @param numberOfObstacles
+     * @param obstacleCoveragePercentage
      */
-    public void generateObstacles(Integer numberOfObstacles) {
-        this.obstacles = new ArrayList<Position>();
+    public void generateObstacles(Float obstacleCoveragePercentage) {
         
-        for(int index = 0; index < numberOfObstacles; index ++) {
-            Position obstacle = this.getValidRandomPosition();
-            this.obstacles.add(obstacle);
+        NumberUtil.validatePercentage(obstacleCoveragePercentage);
+
+        Integer numberOfObstacles = Math.round(this.blockablePositions.size() * obstacleCoveragePercentage);
+
+        this.obstacles = new ArrayList<Position>();
+
+        for(int number = 0; number < numberOfObstacles; number ++) {
+
+            int index = Math.round(NumberUtil.getRandomInteger(1, this.blockablePositions.size())) - 1;
+
+            this.obstacles.add(this.blockablePositions.get(index));
+
+            this.blockablePositions.remove(index);
         }
-    }
-
-
-    /**
-     * Get valid position on the map.
-     * A valid position is where:
-     *  1) is not a fixed wall (a fix wall is where X and Y are both even)
-     *  2) there is no obstacle
-     *  3) is not a position a player needs to start
-     * @return the position
-     */
-    public Position getValidRandomPosition(){
-        Position position;
-        boolean valid;
-
-        do {
-            Position positionTemp = Position.getRandom(this.size, 1);
-
-            //1) Check if there is a fixed wall
-            valid = positionTemp.getX() % 2 != 0 || positionTemp.getY() % 2 != 0;
-
-            //2) Check if there is a obstacle.
-            if(valid) {
-                valid = !this.obstacles.stream().anyMatch(obstacle -> positionTemp.equals(obstacle));
-            }
-
-            //3) Check if there is not a position a player needs to start
-            if(valid) {
-                valid = !this.playerStartPositions.stream().anyMatch(obstacle -> positionTemp.equals(obstacle));
-            }
-
-            position = positionTemp;
-
-        } while(!valid);
-
-        return position;
     }
 
     private List<Position> getPlayerStartPositions() {
@@ -115,4 +93,35 @@ public class MapBusiness {
         return playerStartPositions;
     }
 
+    private List<Position> getBlockablePositions() {
+
+        List<Position> result = new ArrayList<Position>();
+
+        for(Integer x = 1; x <= this.size; x++) {
+            for(Integer y = 1; y <= this.size; y++) {
+            
+                boolean valid;
+                Position positionTemp = new Position(x, y);
+
+                //Check if there is a fixed wall
+                valid = positionTemp.getX() % 2 != 0 || positionTemp.getY() % 2 != 0;
+
+                if(valid) {
+
+                    //Check if there is not a position a player needs to start
+                    valid = !this.playerStartPositions.stream().anyMatch(obstacle -> positionTemp.equals(obstacle));
+
+                    if(valid) {
+                        result.add(positionTemp);
+                    }
+                }
+
+            }   
+        }
+
+         
+
+        return result;
+
+    }
 }
