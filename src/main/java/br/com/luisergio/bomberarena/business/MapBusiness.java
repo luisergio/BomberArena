@@ -67,7 +67,7 @@ public class MapBusiness {
         }
     }
 
-    private List<Position> getPlayerStartPositions() {
+    public List<Position> getPlayerStartPositions() {
         List<Position> playerStartPositions = new ArrayList<Position>();
 
         //Upper left corner
